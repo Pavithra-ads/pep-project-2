@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b1024">
+    <meta name="description" content="Upload a speech recording and get supportive public speaking feedback.">
+    <title>Evaluate your speech — Speakwell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/script.js" defer></script>
+  </head>
+  <body class="analyze-page">
+    <nav class="navbar" aria-label="Main navigation">
+      <a class="brand" href="/" aria-label="Speakwell home">
+        <span class="brand-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>Speakwell<span class="brand-period">.</span></span>
+      </a>
+      <a class="nav-back" href="/"><span aria-hidden="true">←</span> Back to Home</a>
+    </nav>
+
+    <main class="page-width analyze-main">
+      <header class="analyze-intro">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> YOUR PRIVATE PRACTICE SPACE</p>
+        <h1>Let’s hear <span>your voice.</span></h1>
+        <p>Upload a speech and get kind, practical feedback to help you feel ready for the room.</p>
+      </header>
+
+      <section class="upload-card glass-card" id="upload-card" aria-labelledby="upload-title">
+        <div class="upload-heading">
+          <div class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><h2 id="upload-title">Your next great speech starts here</h2><p>Pick a recording or make a new one. This is a judgment-free zone.</p></div>
+        </div>
+        <div class="drop-zone" id="drop-zone" role="group" aria-label="Drop an audio file here or use Browse files">
+          <input id="audio-file" class="visually-hidden" type="file" accept=".mp3,.wav,.m4a,.ogg,.flac,audio/mpeg,audio/wav,audio/mp4,audio/ogg,audio/flac">
+          <div class="drop-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15V3m0 0L7.5 7.5M12 3l4.5 4.5M4 15v3.5A2.5 2.5 0 0 0 6.5 21h11a2.5 2.5 0 0 0 2.5-2.5V15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <strong>Drop your audio recording here</strong>
+          <span class="drop-or">or</span>
+          <button class="button button-outline browse-button" id="browse-button" type="button" aria-controls="audio-file">Browse files</button>
+          <span class="file-hint">MP3, WAV, M4A, OGG, FLAC · up to 25 MB</span>
+        </div>
+        <div class="selected-file" id="selected-file" hidden>
+          <span class="selected-file-icon" aria-hidden="true">♫</span>
+          <span class="selected-file-copy"><strong id="file-name"></strong><small id="file-size"></small></span>
+          <button class="remove-file" id="remove-file" type="button" aria-label="Remove selected file">×</button>
+        </div>
+        <div class="upload-controls">
+          <div class="record-controls">
+            <button class="button button-outline record-button" id="record-button" type="button"><span class="record-dot" aria-hidden="true"></span><span id="record-label">Record a practice</span></button>
+            <span class="record-timer" id="record-timer" aria-live="off" hidden>00:00</span>
+          </div>
+          <button class="button analyze-button" id="analyze-button" type="button" disabled>Analyze Speech <span aria-hidden="true">→</span></button>
+        </div>
+        <p class="privacy-note"><span aria-hidden="true">⌑</span> Your audio is analyzed by this app’s backend and isn’t shared with other users.</p>
+        <div class="alert" id="error-alert" role="alert" aria-live="assertive" hidden></div>
+      </section>
+
+      <section class="loading-card glass-card" id="loading-state" aria-live="polite" hidden>
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <h2>Analyzing your speech</h2>
+        <p>This can take a minute. We’re listening for the details that help you grow.</p>
+      </section>
+
+      <section class="results-section" id="results" aria-labelledby="results-title" hidden>
+        <div class="results-heading">
+          <div><p class="eyebrow"><span class="eyebrow-dot"></span> YOUR SPEAKING SNAPSHOT</p><h2 id="results-title">Look how far you’ve come.</h2><p class="results-subtitle">A few useful insights for your next practice.</p></div>
+          <span class="results-ready"><i></i> Report ready</span>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><span class="stat-label">DURATION</span><strong class="stat-value" id="stat-duration">--:--</strong><span class="stat-foot">Your speech length</span></article>
+          <article class="stat-card"><span class="stat-label">TOTAL WORDS</span><strong class="stat-value" id="stat-words">0</strong><span class="stat-foot">Words spoken</span></article>
+          <article class="stat-card stat-pace"><span class="stat-label">SPEAKING RATE</span><div class="pace-value"><strong class="stat-value" id="stat-wpm">0</strong><span class="pace-unit">WPM</span></div><span class="pace-badge" id="pace-badge">—</span></article>
+          <article class="stat-card"><span class="stat-label">TOTAL FILLERS</span><strong class="stat-value" id="stat-fillers">0</strong><span class="stat-foot">Filler words detected</span></article>
+        </div>
+        <div class="results-grid">
+          <article class="result-card">
+            <div class="result-card-heading"><div><span class="card-kicker">A CLOSER LOOK</span><h3>Filler words</h3></div><span class="card-heading-icon teal-text" aria-hidden="true">〰</span></div>
+            <div class="filler-chart" id="filler-chart" aria-label="Filler word counts"></div>
+          </article>
+          <article class="result-card">
+            <div class="result-card-heading"><div><span class="card-kicker">FIND YOUR FLOW</span><h3>Repetitions</h3></div><span class="card-heading-icon blue-text" aria-hidden="true">⟳</span></div>
+            <div class="chip-list" id="repetitions-list"></div>
+          </article>
+          <article class="result-card timeline-card">
+            <div class="result-card-heading"><div><span class="card-kicker">YOUR SPEECH, OVER TIME</span><h3>Long pauses</h3></div><span class="card-heading-icon violet-text" aria-hidden="true">◷</span></div>
+            <div class="timeline-labels"><span>00:00</span><span id="timeline-end">00:00</span></div>
+            <div class="timeline-track" id="timeline-track" role="img" aria-label="Timeline showing long pauses"></div>
+            <div class="pause-list" id="pause-list"></div>
+          </article>
+          <article class="result-card coach-card">
+            <span class="coach-mark" aria-hidden="true">✳</span><span class="card-kicker">A NOTE FROM YOUR COACH</span>
+            <h3>Keep finding your rhythm.</h3>
+            <p id="feedback-text"></p>
+          </article>
+        </div>
+        <details class="transcript-card">
+          <summary><span><span class="transcript-icon" aria-hidden="true">≡</span> Your transcript</span><span class="transcript-toggle" aria-hidden="true">＋</span></summary>
+          <p class="transcript-text" id="transcript-text"></p>
+        </details>
+        <div class="results-actions">
+          <button class="button button-outline" id="another-button" type="button"><span aria-hidden="true">↻</span> Analyze another speech</button>
+          <button class="button" id="download-button" type="button">Download report <span aria-hidden="true">↓</span></button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer page-width"><a class="brand footer-brand" href="/"><span class="brand-icon" aria-hidden="true"><span></span><span></span><span></span></span><span>Speakwell<span class="brand-period">.</span></span></a><p>Your practice is personal. Your progress is yours.</p><span>© 2026 Speakwell</span></footer>
+  </body>
+</html>
